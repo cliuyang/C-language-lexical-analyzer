@@ -199,10 +199,6 @@ void accept(TYPE type, T value)
 				typeName = "关键字";
 				valueName = paserKey((int)value);
 				break;
-			case IDENTIFIER:
-				typeName = "标识符";
-				// TODO: 完成标识符的相关代码
-				break;
 			case DELIMITER:
 				typeName = "分界符";
 				valueName = paserDelimitier((int)value);
