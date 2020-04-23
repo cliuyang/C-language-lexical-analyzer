@@ -8,6 +8,7 @@ H			[a-fA-F0-9]
 E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
+CH			[azA-Z0-9`~!@#$%^&*\(\)_+-=\{\}\[\]\|\\:;"\',<.>/?]
 
 %{
 #include <cstdio>
@@ -30,7 +31,8 @@ typedef enum
 	ARITHMETIC_OPERATOR,
 	CONSTANT,
 	REAL,
-	STRING
+	STRING,
+	CHARACTER
 }TYPE;
 
 typedef enum
@@ -163,7 +165,7 @@ void error(string message);
 0[xX]{H}+{IS}?		{ accept(CONSTANT, yytext, atoi(yytext)); }
 0{D}+{IS}?			{ accept(CONSTANT, yytext, atoi(yytext)); }
 {D}+{IS}?			{ accept(CONSTANT, yytext, atoi(yytext)); }
-L?'(\\.|[^\\'])+'	{ accept(CONSTANT, yytext, atoi(yytext)); }
+L?'(\\.|[^\\'])+'	{ accept(CHARACTER, yytext, atoi(yytext)); }
 
 {D}+{E}{FS}?			{ accept(REAL, yytext, atof(yytext)); }
 {D}*"."{D}+({E})?{FS}?	{ accept(REAL, yytext, atof(yytext)); }
@@ -184,32 +186,48 @@ void accept(TYPE type, char* text, T value)
 {
 	if(isDetail)
 	{
-		string typeName;
-		switch(type)
+		if(type == CONSTANT || type == REAL || type == CHARACTER)
 		{
-		case KEY:
-			typeName = "关键字";
-			break;
-		case DELIMITER:
-			typeName = "分界符";
-			break;
-		case ARITHMETIC_OPERATOR:
-			typeName = "运算符";
-			break;
-		case CONSTANT:
-			typeName = "整形数";
-			break;
-		case REAL:
-			typeName = "浮点数";
-			break;
-		case STRING:
-			typeName = "字符串";
-			break;
-		case IDENTIFIER:
-			typeName = "标识符";
-			break;
+			switch(type)
+			{
+			case CONSTANT:
+				cout << (Index++) << " 整形数 " << value << endl;
+				break;
+			case REAL:
+				cout << (Index++) << " 浮点数 " << value << endl;
+				break;
+			case CHARACTER:
+				cout << (Index++) << " 字符型 " << (int)text[1] << endl;
+				break;
+			default:
+				break;
+			}
 		}
-		cout << (Index++) << " " << typeName << " " << text << endl;
+		else
+		{
+			string typeName;
+			switch(type)
+			{
+			case KEY:
+				typeName = "关键字";
+				break;
+			case DELIMITER:
+				typeName = "分界符";
+				break;
+			case ARITHMETIC_OPERATOR:
+				typeName = "运算符";
+				break;
+			case STRING:
+				typeName = "字符串";
+				break;
+			case IDENTIFIER:
+				typeName = "标识符";
+				break;
+			default:
+				break;
+			}
+			cout << (Index++) << " " << typeName << " " << text << endl;
+		}
 	}
 	else
 	{
