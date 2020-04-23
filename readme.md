@@ -75,3 +75,7 @@ chmod +x ./run.sh
 ## 声明
 
 本程序代码作者为陈留阳，在2020年04月23日完成编写。
+
+仓库地址为[https://github.com/cliuyang/C-language-lexical-analyzer](https://github.com/cliuyang/C-language-lexical-analyzer)
+
+遵循[MIT](./LICENSE)许可协议。
